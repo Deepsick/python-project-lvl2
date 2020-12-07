@@ -1,0 +1,1 @@
+from gendiff.comparator import generate_diff
