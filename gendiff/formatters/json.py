@@ -1,5 +1,5 @@
 import json
 
 
-def format(nodes):
-    return json.dumps(nodes)
+def format(node):
+    return json.dumps(node)
