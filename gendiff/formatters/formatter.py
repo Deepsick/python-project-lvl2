@@ -9,6 +9,6 @@ map_format_to_formatter = {
 
 def format(tree, format):
     if format not in map_format_to_formatter:
-        raise "This format isn't supported"
+        raise ValueError("This format isn't supported")
 
     return map_format_to_formatter[format](tree)

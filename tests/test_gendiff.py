@@ -27,10 +27,8 @@ for format in OUTPUT_FORMATS:
 @pytest.mark.parametrize('format', FORMATS)
 def test_gendiff_format(format):
     """Check that format is working correctly."""
-    print(get_path('file1.yml'))
     file_path_1 = get_path(f'file1.{format}')
     file_path_2 = get_path(f'file2.{format}')
-
     for format in OUTPUT_FORMATS:
         diff = generate_diff(file_path_1, file_path_2, format)
         assert diff == map_format_to_result[format]

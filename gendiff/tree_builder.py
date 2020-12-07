@@ -1,7 +1,7 @@
 from gendiff.const import KeyType
 
 
-def build_diff(first_object, second_object):
+def get_diff(first_object, second_object):
     union_keys = first_object.keys() | second_object.keys()
     tree = []
     for key in sorted(union_keys):
@@ -28,7 +28,7 @@ def build_diff(first_object, second_object):
             tree.append({
                 'type': KeyType["NESTED"],
                 'key': key,
-                'children': build_diff(first_object[key], second_object[key])
+                'children': get_diff(first_object[key], second_object[key])
             })
             continue
 
@@ -48,3 +48,10 @@ def build_diff(first_object, second_object):
         })
 
     return tree
+
+
+def build_diff(first_object, second_object):
+    return {
+        'type': 'origin',
+        'children': get_diff(first_object, second_object)
+    }

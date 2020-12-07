@@ -14,32 +14,50 @@ def stringify(value):
     return str(value).lower()
 
 
-def format(nodes):
-    result = []
-    for node in nodes:
-        node_type = node["type"]
-        key = node["key"]
+def flat_list(items):
+    flatten_rows = []
 
-        if node_type == KeyType["NESTED"]:
-            children = node["children"][:]
-            for child in children:
-                child["key"] = f'{key}.{child["key"]}'
-            result.append(format(children))
+    if type(items) != list:
+        return [items]
+    for item in items:
+        flatten_rows.extend(flat_list(item))
 
-        if node_type == KeyType["ADDED"]:
-            value = stringify(node['value'])
-            result.append(
-                f"Property '{key}' was added with value: {value}"
-            )
+    return flatten_rows
 
-        if node_type == KeyType["REMOVED"]:
-            result.append(f"Property '{key}' was removed")
 
-        if node_type == KeyType["UPDATED"]:
-            value = stringify(node['old_value'])
-            new_value = stringify(node['new_value'])
-            result.append(
-                f"Property '{key}' was updated. From {value} to {new_value}"
-            )
+def format(node):
+    node_type = node["type"]
+    key = node.get("key")
+    children = node.get("children")
 
-    return '\n'.join(result)
+    if node_type == KeyType['ORIGIN']:
+        rows = [format(child) for child in children]
+        return '\n'.join(flat_list(rows))
+
+    if node_type == KeyType["NESTED"]:
+        rows = []
+        for child in children:
+            child["key"] = f'{key}.{child["key"]}'
+            rows.append(format(child))
+        return rows
+
+    if node_type == KeyType["ADDED"]:
+        value = stringify(node['value'])
+        return (
+            f"Property '{key}' was added with value: {value}"
+        )
+
+    if node_type == KeyType["REMOVED"]:
+        return f"Property '{key}' was removed"
+
+    if node_type == KeyType["UPDATED"]:
+        value = stringify(node['old_value'])
+        new_value = stringify(node['new_value'])
+        return (
+            f"Property '{key}' was updated. From {value} to {new_value}"
+        )
+
+    if node_type == KeyType["UNCHANGED"]:
+        return []
+
+    raise ValueError('There is no such node type')

@@ -9,6 +9,6 @@ map_format_to_parser = {
 
 def parse(content, format):
     if format not in map_format_to_parser:
-        raise "This format isn't supported"
+        raise ValueError("This format isn't supported")
 
     return map_format_to_parser[format](content)
