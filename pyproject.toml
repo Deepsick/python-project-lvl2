@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "hexlet_code"
 version = "0.1.0"
-description = ""
+description = "Script to diff two files"
 authors = ["Deepsick"]
 packages = [
   { include = "gendiff" },

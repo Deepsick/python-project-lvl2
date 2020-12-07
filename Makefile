@@ -10,7 +10,7 @@ package-install:
 selfcheck:
 	poetry check
 
-make lint:
+lint:
 	poetry run flake8 gendiff
 
 test:
