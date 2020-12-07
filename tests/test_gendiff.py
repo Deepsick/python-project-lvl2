@@ -7,9 +7,11 @@ FIXTURES_DIR = 'fixtures'
 FORMATS = ['json', 'yml']
 OUTPUT_FORMATS = ['plain', 'stylish', 'json']
 
+
 def get_path(file_name):
     dir_path = pathlib.Path(__file__).absolute().parent
     return os.path.join(dir_path, FIXTURES_DIR, file_name)
+
 
 def read_file(path):
     with open(path) as f:
@@ -36,7 +38,7 @@ def test_gendiff_format(format):
 
 def test_gendiff_default():
     """Check that stylish format is applied by default."""
-    file_path_1 = get_path(f'file1.json')
-    file_path_2 = get_path(f'file2.yml')
+    file_path_1 = get_path('file1.json')
+    file_path_2 = get_path('file2.yml')
     diff = generate_diff(file_path_1, file_path_2)
     assert diff == map_format_to_result['stylish']

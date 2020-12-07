@@ -2,8 +2,8 @@
 KeyType = {
     "ORIGIN": "origin",
     "ADDED": "added",
-    "REMOVED":  "removed",
-    "UPDATED":  "updated",
+    "REMOVED": "removed",
+    "UPDATED": "updated",
     "NESTED": "nested",
     "UNCHANGED": "unchanged"
 }
