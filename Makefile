@@ -16,5 +16,5 @@ make lint:
 test:
 	poetry run pytest tests
 
-code-coverage:
+test-coverage:
 	poetry run coverage report -m
