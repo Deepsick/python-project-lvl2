@@ -1,6 +1,6 @@
 from gendiff.formatters import stylish, plain, json
 
-map_format_to_formatter = {
+formatters = {
     "plain": plain.format,
     "stylish": stylish.format,
     "json": json.format
@@ -8,7 +8,7 @@ map_format_to_formatter = {
 
 
 def format(tree, format):
-    if format not in map_format_to_formatter:
+    if format not in formatters:
         raise ValueError("This format isn't supported")
 
-    return map_format_to_formatter[format](tree)
+    return formatters[format](tree)

@@ -1,4 +1,4 @@
-from gendiff.const import KeyType
+from gendiff.node_types import NODE_TYPE
 
 DEFAULT_INDENT = "    "
 
@@ -32,34 +32,34 @@ def format(node, depth=0):
     indent = make_indent(depth)
     children = node.get('children')
 
-    if node_type == KeyType["ORIGIN"]:
+    if node_type == NODE_TYPE["origin"]:
         rows = [f'{indent}{format(child, depth)}\n' for child in children]
         return f'{{\n{"".join(rows)}}}'
 
-    if node_type == KeyType["NESTED"]:
+    if node_type == NODE_TYPE["nested"]:
         rows = [f'{format(child, depth + 1)}\n' for child in children]
         result = "".join(rows)
         return (
             f'{indent}    {key}: {{\n{result}{make_indent(depth + 1)}}}'
         )
 
-    if node_type == KeyType["ADDED"]:
+    if node_type == NODE_TYPE["added"]:
         return (
             f'{indent}  + {key}: {stringify(node["value"], depth)}'
         )
 
-    if node_type == KeyType["REMOVED"]:
+    if node_type == NODE_TYPE["removed"]:
         return (
             f'{indent}  - {key}: {stringify(node["value"], depth)}'
         )
 
-    if node_type == KeyType["UPDATED"]:
+    if node_type == NODE_TYPE["updated"]:
         return '\n'.join([
             f'{indent}  - {key}: {stringify(node["old_value"], depth)}',
             f'{indent}  + {key}: {stringify(node["new_value"], depth)}'
         ])
 
-    if node_type == KeyType["UNCHANGED"]:
+    if node_type == NODE_TYPE["unchanged"]:
         return (
             f'{indent}    {key}: {stringify(node["value"], depth)}'
         )

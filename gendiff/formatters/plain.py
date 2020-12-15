@@ -1,4 +1,4 @@
-from gendiff.const import KeyType
+from gendiff.node_types import NODE_TYPE
 
 
 def stringify(value):
@@ -30,34 +30,34 @@ def format(node):
     key = node.get("key")
     children = node.get("children")
 
-    if node_type == KeyType['ORIGIN']:
+    if node_type == NODE_TYPE['origin']:
         rows = [format(child) for child in children]
         return '\n'.join(flat_list(rows))
 
-    if node_type == KeyType["NESTED"]:
+    if node_type == NODE_TYPE["nested"]:
         rows = []
         for child in children:
             child["key"] = f'{key}.{child["key"]}'
             rows.append(format(child))
         return rows
 
-    if node_type == KeyType["ADDED"]:
+    if node_type == NODE_TYPE["added"]:
         value = stringify(node['value'])
         return (
             f"Property '{key}' was added with value: {value}"
         )
 
-    if node_type == KeyType["REMOVED"]:
+    if node_type == NODE_TYPE["removed"]:
         return f"Property '{key}' was removed"
 
-    if node_type == KeyType["UPDATED"]:
+    if node_type == NODE_TYPE["updated"]:
         value = stringify(node['old_value'])
         new_value = stringify(node['new_value'])
         return (
             f"Property '{key}' was updated. From {value} to {new_value}"
         )
 
-    if node_type == KeyType["UNCHANGED"]:
+    if node_type == NODE_TYPE["unchanged"]:
         return []
 
     raise ValueError('There is no such node type')
