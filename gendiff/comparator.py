@@ -1,5 +1,5 @@
 from os.path import abspath, splitext
-from gendiff import parser, tree_builder
+from gendiff import parser, tree
 from gendiff.formatters import formatter
 
 
@@ -15,5 +15,5 @@ def generate_diff(file_path_1, file_path_2, format="stylish"):
     parsed_data_1 = parser.parse(data_1, get_file_format(file_path_1))
     parsed_data_2 = parser.parse(data_2, get_file_format(file_path_2))
 
-    diff_tree = tree_builder.build_diff(parsed_data_1, parsed_data_2)
+    diff_tree = tree.build_diff(parsed_data_1, parsed_data_2)
     return formatter.format(diff_tree, format)

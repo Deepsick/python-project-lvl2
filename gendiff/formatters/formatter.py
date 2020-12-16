@@ -1,14 +1,23 @@
 from gendiff.formatters import stylish, plain, json
 
-formatters = {
-    "plain": plain.format,
-    "stylish": stylish.format,
-    "json": json.format
+FORMATS = {
+    "plain": "plain",
+    "stylish": "stylish",
+    "json": "json"
 }
 
 
 def format(tree, format):
-    if format not in formatters:
-        raise ValueError("This format isn't supported")
+    if format == FORMATS["plain"]:
+        return plain.format(tree)
 
-    return formatters[format](tree)
+    if format == FORMATS["stylish"]:
+        return stylish.format(tree)
+
+    if format == FORMATS["json"]:
+        return json.format(tree)
+
+    raise ValueError(
+        f'''{format} format isn't supported.
+        Supported formats: {', '.join(FORMATS.keys())}'''
+    )

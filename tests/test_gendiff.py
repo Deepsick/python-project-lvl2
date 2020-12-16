@@ -1,12 +1,14 @@
 import pytest
 import os
-from gendiff.comparator import generate_diff
 import pathlib
+import json
+from gendiff.comparator import generate_diff
+from gendiff import parser
+from gendiff.formatters import formatter
 
 FIXTURES_DIR = 'fixtures'
-FORMATS = ['json', 'yml']
-OUTPUT_FORMATS = ['plain', 'stylish', 'json']
-
+formats = parser.FORMATS.keys()
+output_formats = formatter.FORMATS.keys() 
 
 def get_path(file_name):
     dir_path = pathlib.Path(__file__).absolute().parent
@@ -20,20 +22,24 @@ def read_file(path):
 
 
 map_format_to_result = {}
-for format in OUTPUT_FORMATS:
+for format in output_formats:
     map_format_to_result[format] = read_file(
         get_path(f'result.{format}')
     )
 
 
-@pytest.mark.parametrize('format', FORMATS)
+@pytest.mark.parametrize('format', formats)
 def test_gendiff_format(format):
     """Check that format is working correctly."""
     file_path_1 = get_path(f'file1.{format}')
     file_path_2 = get_path(f'file2.{format}')
-    for format in OUTPUT_FORMATS:
-        diff = generate_diff(file_path_1, file_path_2, format)
-        assert diff == map_format_to_result[format]
+    for output_format in output_formats:
+        diff = generate_diff(file_path_1, file_path_2, output_format)
+
+        if output_format == formatter.FORMATS["json"]:
+            assert json.loads(diff) == json.loads(map_format_to_result[output_format])
+            continue
+        assert diff == map_format_to_result[output_format]
 
 
 def test_gendiff_default():

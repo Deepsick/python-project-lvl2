@@ -1,6 +1,7 @@
-from gendiff.node_types import NODE_TYPE
+from gendiff.tree import NODE_TYPES
 
-DEFAULT_INDENT = "    "
+INDENT_TYPE = " "
+INDENT_SIZE = 4
 
 
 def stringify(value, depth):
@@ -22,8 +23,8 @@ def stringify(value, depth):
     return value
 
 
-def make_indent(depth, indent_type=DEFAULT_INDENT):
-    return indent_type * depth
+def make_indent(depth, indent_size=INDENT_SIZE, indent_type=INDENT_TYPE):
+    return indent_type * indent_size * depth
 
 
 def format(node, depth=0):
@@ -32,34 +33,34 @@ def format(node, depth=0):
     indent = make_indent(depth)
     children = node.get('children')
 
-    if node_type == NODE_TYPE["origin"]:
+    if node_type == NODE_TYPES["origin"]:
         rows = [f'{indent}{format(child, depth)}\n' for child in children]
         return f'{{\n{"".join(rows)}}}'
 
-    if node_type == NODE_TYPE["nested"]:
+    if node_type == NODE_TYPES["nested"]:
         rows = [f'{format(child, depth + 1)}\n' for child in children]
         result = "".join(rows)
         return (
             f'{indent}    {key}: {{\n{result}{make_indent(depth + 1)}}}'
         )
 
-    if node_type == NODE_TYPE["added"]:
+    if node_type == NODE_TYPES["added"]:
         return (
             f'{indent}  + {key}: {stringify(node["value"], depth)}'
         )
 
-    if node_type == NODE_TYPE["removed"]:
+    if node_type == NODE_TYPES["removed"]:
         return (
             f'{indent}  - {key}: {stringify(node["value"], depth)}'
         )
 
-    if node_type == NODE_TYPE["updated"]:
+    if node_type == NODE_TYPES["updated"]:
         return '\n'.join([
             f'{indent}  - {key}: {stringify(node["old_value"], depth)}',
             f'{indent}  + {key}: {stringify(node["new_value"], depth)}'
         ])
 
-    if node_type == NODE_TYPE["unchanged"]:
+    if node_type == NODE_TYPES["unchanged"]:
         return (
             f'{indent}    {key}: {stringify(node["value"], depth)}'
         )

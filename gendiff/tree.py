@@ -1,4 +1,11 @@
-from gendiff.node_types import NODE_TYPE
+NODE_TYPES = {
+    "origin": "origin",
+    "added": "added",
+    "removed": "removed",
+    "updated": "updated",
+    "nested": "nested",
+    "unchanged": "unchanged"
+}
 
 
 def get_diff(first_object, second_object):
@@ -7,7 +14,7 @@ def get_diff(first_object, second_object):
     for key in sorted(union_keys):
         if key not in first_object:
             tree.append({
-                'type': NODE_TYPE["added"],
+                'type': NODE_TYPES["added"],
                 'key': key,
                 'value': second_object[key]
             })
@@ -15,7 +22,7 @@ def get_diff(first_object, second_object):
 
         if key not in second_object:
             tree.append({
-                'type': NODE_TYPE["removed"],
+                'type': NODE_TYPES["removed"],
                 'key': key,
                 'value': first_object[key]
             })
@@ -26,7 +33,7 @@ def get_diff(first_object, second_object):
             dict
         ) and isinstance(second_object[key], dict):
             tree.append({
-                'type': NODE_TYPE["nested"],
+                'type': NODE_TYPES["nested"],
                 'key': key,
                 'children': get_diff(first_object[key], second_object[key])
             })
@@ -34,7 +41,7 @@ def get_diff(first_object, second_object):
 
         if first_object[key] != second_object[key]:
             tree.append({
-                'type': NODE_TYPE["updated"],
+                'type': NODE_TYPES["updated"],
                 'key': key,
                 'old_value': first_object[key],
                 'new_value': second_object[key]
@@ -42,7 +49,7 @@ def get_diff(first_object, second_object):
             continue
 
         tree.append({
-            'type': NODE_TYPE["unchanged"],
+            'type': NODE_TYPES["unchanged"],
             'key': key,
             'value': first_object[key]
         })
@@ -52,6 +59,6 @@ def get_diff(first_object, second_object):
 
 def build_diff(first_object, second_object):
     return {
-        'type': NODE_TYPE["origin"],
+        'type': NODE_TYPES["origin"],
         'children': get_diff(first_object, second_object)
     }

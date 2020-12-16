@@ -1,14 +1,21 @@
 import json
 import yaml
 
-parsers = {
-    'json': json.load,
-    'yml': yaml.safe_load
+FORMATS = {
+    "json": "json",
+    "yml": "yml",
+    "yaml": "yaml"
 }
 
 
 def parse(content, format):
-    if format not in parsers:
-        raise ValueError("This format isn't supported")
+    if format == FORMATS["json"]:
+        return json.load(content)
 
-    return parsers[format](content)
+    if format == FORMATS["yml"] or format == FORMATS["yaml"]:
+        return yaml.safe_load(content)
+
+    raise ValueError(
+        f'''{format} format isn't supported.
+        Supported formats: {', '.join(FORMATS.keys())}'''
+    )
