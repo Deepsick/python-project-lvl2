@@ -8,7 +8,8 @@ from gendiff.formatters import formatter
 
 FIXTURES_DIR = 'fixtures'
 formats = parser.FORMATS.keys()
-output_formats = formatter.FORMATS.keys() 
+output_formats = formatter.FORMATS.keys()
+
 
 def get_path(file_name):
     dir_path = pathlib.Path(__file__).absolute().parent
@@ -37,7 +38,8 @@ def test_gendiff_format(format):
         diff = generate_diff(file_path_1, file_path_2, output_format)
 
         if output_format == formatter.FORMATS["json"]:
-            assert json.loads(diff) == json.loads(map_format_to_result[output_format])
+            json_result = map_format_to_result[output_format]
+            assert json.loads(diff) == json.loads(json_result)
             continue
         assert diff == map_format_to_result[output_format]
 
